@@ -19,11 +19,22 @@
     <textarea
       id="lesson"
       placeholder="Paste your HTML or lesson text here..."
+      [value]="lessonHtml()" (input)="lessonHtml.set($any($event.target).value)"
     ></textarea>
+    <p>Characters: {{ lessonHtml().length }}</p>
 
     <div class="actions">
       <span class="hint">✧ Processed locally</span>
-      <button type="button">✦ Extract vocabulary</button>
+      <div>
+        <button (click)="lessonHtml.set('')" >Clear</button>
+        <button type="button" (click)="extractVocabulary()" [disabled]="isLoading()"  >
+          @if (isLoading()) {
+            <span class="spinner"></span>Extracting vocabulary
+          } @else{
+            ✦ Extract vocabulary
+          }</button>
+      </div>
+
     </div>
   </main>
 
