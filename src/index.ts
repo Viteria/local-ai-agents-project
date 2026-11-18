@@ -2,31 +2,32 @@ import OpenAi from 'openai';
 import {Agent, run, setDefaultOpenAIClient, setOpenAIAPI, tool, MCPServerStdio} from "@openai/agents";
 import z from "zod";
 import {readFile} from "node:fs/promises";
-
-import {extractLessonText} from "./import/extractLessonText.js";
-import {vocabularyAgent} from "./vacabularyAgent.js";
-
-//ollama connect
-const client = new OpenAi({
-    baseURL: "http://localhost:11434/v1",
-    apiKey: 'ollama',
-
-})
+import { writeFile } from "node:fs/promises";
+import {extractVocabularyFromLesson} from "./services/extractVocabularyFromLeaason.js";
+import {exportToQuizlet} from "./utils/exportToQuizlet.js";
+import {configOllama} from "./config/ollama.js";
 
 
-setDefaultOpenAIClient(client);
-setOpenAIAPI('chat_completions')
+configOllama();
 
 //lesson text workflow
 const html = await readFile("src/data/lesson1-example.html","utf-8");
+//extract words from lesson
+const vocabulary = await extractVocabularyFromLesson(html)
 
-const textLesson = extractLessonText(html);
-console.log('parsed text',textLesson)
-console.time("Agents SDK extraction");
-const result = await run(vocabularyAgent, `Extract useful vocabulary from this lesson:\n\n${textLesson}`)
-console.timeEnd("Agents SDK extraction");
-const vocabulary =result.finalOutput
-console.log("Extracted vocabulary:", vocabulary);
+//prepare vocabulary for quizlet tsv format
+const tsvData = exportToQuizlet(vocabulary.vocabulary)
+
+//save to the file
+try{
+    await writeFile('src/data/vocabulary.tsv',tsvData,'utf-8')
+}catch(e){
+    console.error(e);
+}
+
+
+
+
 
 // const getCurrentTimeTool = tool({
 //     name:'get_current_time',

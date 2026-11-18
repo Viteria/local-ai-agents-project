@@ -1,5 +1,5 @@
 import {Agent} from "@openai/agents";
-import {VocabularySchema} from "./schemas/vocabulary.js";
+import {VocabularySchema} from "../schemas/vocabulary.js";
 
 export const vocabularyAgent = new Agent({
     name: 'vacabularyAgent',

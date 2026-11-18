@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:server": "OPENAI_API_KEY=ollama OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_AGENTS_DISABLE_TRACING=1 tsx src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,10 +15,12 @@
     "@modelcontextprotocol/server": "^2.4.0",
     "@openai/agents": "^0.21.0",
     "cheerio": "^1.2.0",
+    "express": "^5.3.0",
     "openai": "^7.53.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^26.6.6",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"

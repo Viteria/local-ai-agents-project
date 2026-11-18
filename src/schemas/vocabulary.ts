@@ -5,7 +5,7 @@ export const VocabularySchema = z.object({
         z.object({
             expression:z.string(),
             translation:z.string(),
-            context:z.string(),
+            context:z.string().optional(),
         })
     )
 })
